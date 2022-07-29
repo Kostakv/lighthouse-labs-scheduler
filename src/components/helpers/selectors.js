@@ -1,8 +1,24 @@
-export function getAppointmentsForDay(state, day) {
+ function getAppointmentsForDay(state, day) {
   const appointments = state.days.find(app => app.name === day);
-  if (state.days.length === 0 || appointments === undefined) {
+  if (!appointments) {
     return [];
   }
   return appointments.appointments.map((id) => state.appointments[id]);
 
 }
+
+ function getInterview(state, interview) {
+  if (interview){
+  const interviewer = state.interviewers[interview.interviewer]
+  return {interviewer,student:interview.student}
+  }
+
+  else {
+    return null
+  }
+  
+
+  
+}
+
+export {getAppointmentsForDay, getInterview}

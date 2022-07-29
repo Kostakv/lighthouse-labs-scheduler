@@ -13,7 +13,10 @@ export default function Appointment(props){
       <div>
       <article className="appointment"></article>
       <Header time={props.time} />
-      <Show />
+      <Show 
+        student={props.interview.student}
+        interviewer={props.interview.interviewer}
+      />
       </div>
     )
   }
