@@ -1,4 +1,4 @@
- function getAppointmentsForDay(state, day) {
+function getAppointmentsForDay(state, day) {
   const appointments = state.days.find(app => app.name === day);
   if (!appointments) {
     return [];
@@ -7,18 +7,18 @@
 
 }
 
- function getInterview(state, interview) {
-  if (interview){
-  const interviewer = state.interviewers[interview.interviewer]
-  return {interviewer,student:interview.student}
+function getInterview(state, interview) {
+  if (interview) {
+    const interviewer = state.interviewers[interview.interviewer];
+    return { interviewer, student: interview.student };
   }
 
   else {
-    return null
+    return null;
   }
-  
 
-  
+
+
 }
 
-export {getAppointmentsForDay, getInterview}
+export { getAppointmentsForDay, getInterview };
