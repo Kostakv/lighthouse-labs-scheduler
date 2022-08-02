@@ -17,8 +17,18 @@ function getInterview(state, interview) {
     return null;
   }
 
+}
 
+function getInterviewersForDay(state, day) {
+  const interviewers = state.days.find(app => app.name === day);
+  if (!interviewers) {
+    return [];
+  }
+  console.log('These are the interviewers',interviewers.interviewers);
+  return interviewers.interviewers;
 
 }
 
-export { getAppointmentsForDay, getInterview };
+
+
+export { getAppointmentsForDay, getInterview, getInterviewersForDay };

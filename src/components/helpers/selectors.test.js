@@ -1,17 +1,20 @@
-import { getAppointmentsForDay } from "./selectors";
+import { getAppointmentsForDay, getInterviewersForDay } from "./selectors";
 
 const state = {
   days: [
     {
       id: 1,
       name: "Monday",
-      appointments: [1, 2, 3]
+      appointments: [1, 2, 3],
+      interviewers: [2,3,8,9,10]
     },
     {
       id: 2,
       name: "Tuesday",
-      appointments: [4, 5]
-    }
+      appointments: [4, 5],
+      interviewers: [1,7,10]
+    },
+    
   ],
   appointments: {
     "1": { id: 1, time: "12pm", interview: null },
@@ -54,4 +57,9 @@ test("getAppointmentsForDay returns an empty array when the days data is empty",
 test("getAppointmentsForDay returns an empty array when the day is not found", () => {
   const result = getAppointmentsForDay(state, "Wednesday");
   expect(result.length).toEqual(0);
+});
+
+test("getInterviewersForDay returns an array", () => {
+  const result = getInterviewersForDay(state, "Monday");
+  expect(Array.isArray(result)).toBe(true);
 });
