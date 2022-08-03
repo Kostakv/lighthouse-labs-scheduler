@@ -4,18 +4,16 @@ import axios from "axios";
 import DayList from "components/DayList";
 import Appointment from "components/Appointment";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "./helpers/selectors.js";
-import useVisualMode from "hooks/useVisualMode.js";
 
 
-const SHOW = 'SHOW';
-const EMPTY = 'EMPTY';
 
 export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
     appointments: {},
-    interviewers: {}
+    interviewers: {},
+    interview: {}
   });
 
   function bookInterview(id, interview) {
@@ -29,7 +27,6 @@ export default function Application(props) {
       [id]: appointment
     };
    return axios.put(`/api/appointments/${id}`, { interview }).then((response) => {
-      
       setState({
         ...state,
         appointments
@@ -45,7 +42,7 @@ export default function Application(props) {
   function cancelInterview(id, interview){
     const appointment = {
       ...state.appointments[id],
-      interview: { ...interview }
+      interview: null
     };
 
     const appointments = {
@@ -54,10 +51,9 @@ export default function Application(props) {
     };
 
     return axios.delete(`/api/appointments/${id}`, { interview }).then((response) => {
-      
       setState({
         ...state,
-        appointments
+        interview
       });
 
     }).catch((error) => {
