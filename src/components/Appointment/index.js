@@ -7,6 +7,7 @@ import useVisualMode from "hooks/useVisualMode";
 import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
+import Error from "./Error";
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
@@ -15,6 +16,8 @@ const SAVING = 'SAVING';
 const DELETE = 'DELETE';
 const DELETING = 'DELETING';
 const EDIT = 'EDIT';
+const ERROR_SAVE = 'ERROR_SAVE';
+const ERROR_DELETE = 'ERROR_DELETE';
 
 
 export default function Appointment(props) {
@@ -28,25 +31,27 @@ export default function Appointment(props) {
   );
 
 
-  async function save(name, interviewer) {
+  function save(name, interviewer) {
     const interview = {
       student: name,
       interviewer
     };
     transition(SAVING);
-    await props.bookInterview(props.id, interview);
-    transition(SHOW);
+    props.bookInterview(props.id, interview)
+      .then(() => transition(SHOW))
+      .catch(error => transition(ERROR_SAVE, true));
 
   }
 
-  async function deleteInterview(name, interviewer) {
+  function deleteInterview(name, interviewer) {
     const interview = {
       student: name,
       interviewer
     };
-    transition(DELETING);
-    await props.cancelInterview(props.id, interview);
-    transition(EMPTY);
+    transition(DELETING,true);
+    props.cancelInterview(props.id, interview)
+      .then(() => transition(EMPTY))
+      .catch(error => transition(ERROR_DELETE, true));
   }
 
   return (
@@ -86,7 +91,25 @@ export default function Appointment(props) {
       {
         mode === DELETING && (
           <Status
-          message={'Deleting'}
+            message={'Deleting'}
+          />
+        )
+      }
+
+      {
+        mode === ERROR_DELETE && (
+          <Error
+            onClose={back}
+            message={'Error when deleting interview...'}
+          />
+        )
+      }
+
+      {
+        mode === ERROR_SAVE && (
+          <Error
+            onClose={back}
+            message={'Error when saving interview...'}
           />
         )
       }
@@ -94,11 +117,11 @@ export default function Appointment(props) {
       {
         mode === EDIT && (
           <Form
-          interviewers={props.interviewers}
-          student={props.interview.student}
-          interviewer={props.interview.interviewer.id}
-          onCancel={() => back()}
-          onSave={save}
+            interviewers={props.interviewers}
+            student={props.interview.student}
+            interviewer={props.interview.interviewer.id}
+            onCancel={() => back()}
+            onSave={save}
           />
         )
       }
