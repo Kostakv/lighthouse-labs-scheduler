@@ -3,9 +3,12 @@ import "components/Application.scss";
 import axios from "axios";
 import DayList from "components/DayList";
 import Appointment from "components/Appointment";
-import { getAppointmentsForDay, getInterview } from "./helpers/selectors.js";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "./helpers/selectors.js";
+import useVisualMode from "hooks/useVisualMode.js";
 
 
+const SHOW = 'SHOW';
+const EMPTY = 'EMPTY';
 
 export default function Application(props) {
   const [state, setState] = useState({
@@ -14,6 +17,55 @@ export default function Application(props) {
     appointments: {},
     interviewers: {}
   });
+
+  function bookInterview(id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+   return axios.put(`/api/appointments/${id}`, { interview }).then((response) => {
+      
+      setState({
+        ...state,
+        appointments
+      });
+
+    }).catch((error) => {
+      console.log('Axios error: ', error);
+    });
+
+  }
+
+
+  function cancelInterview(id, interview){
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    return axios.delete(`/api/appointments/${id}`, { interview }).then((response) => {
+      
+      setState({
+        ...state,
+        appointments
+      });
+
+    }).catch((error) => {
+      console.log('Axios error: ', error);
+    });
+
+  }
+
 
   const setDay = day => setState({ ...state, day });
 
@@ -31,8 +83,10 @@ export default function Application(props) {
 
   const appointments = getAppointmentsForDay(state, state.day);
 
+  const interviewers = getInterviewersForDay(state, state.day);
+
   const schedule = appointments.map((appointment) => {
-    const interview = getInterview(state, appointment.interview);
+  const interview = getInterview(state, appointment.interview);
 
     return (
       <Appointment
@@ -40,6 +94,10 @@ export default function Application(props) {
         id={appointment.id}
         time={appointment.time}
         interview={interview}
+        bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
+        interviewers={interviewers}
+
       />
     );
   });

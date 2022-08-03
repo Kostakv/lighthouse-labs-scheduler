@@ -1,8 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import classNames from "classnames";
 import Button from "components/Button";
 
 export default function Confirm (props){
+
+
+
+
+  console.log('Props for Confirm',props)
   return (
     <main className="appointment__card appointment__card--confirm">
   <h1 className="text--semi-bold">{props.message}</h1>
@@ -11,7 +16,7 @@ export default function Confirm (props){
     onClick={props.onCancel}
     danger>Cancel</Button>
     <Button 
-    onClick={props.onConfirm}
+    onClick={()=>props.onConfirm(props.student,props.interviewer)}
     danger>Confirm</Button>
   </section>
 </main>

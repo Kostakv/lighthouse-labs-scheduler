@@ -20,13 +20,24 @@ function getInterview(state, interview) {
 }
 
 function getInterviewersForDay(state, day) {
-  const interviewers = state.days.find(app => app.name === day);
-  if (!interviewers) {
-    return [];
-  }
-  console.log('These are the interviewers',interviewers.interviewers);
-  return interviewers.interviewers;
+  let interviewerArray = [];
+  
+  for (let dayObj of state.days) {
 
+    if(dayObj.name === day) {
+
+      let interviewerIds = dayObj.interviewers
+      for (let interviewerId of interviewerIds) {
+
+        if(state.interviewers[interviewerId]) {
+
+          interviewerArray.push(state.interviewers[interviewerId]);
+        }
+      }
+    }  
+  }
+
+  return interviewerArray;
 }
 
 
