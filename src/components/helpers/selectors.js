@@ -24,7 +24,8 @@ function getInterviewersForDay(state, day) {
   if (!currentDayInfo) {
     return [];
   }
-  return currentDayInfo.interviewers.map((id) => state.interviewers[id]);
+   const mappedInterviews = currentDayInfo.interviewers.map((id) => state.interviewers[id]);
+   return mappedInterviews
 }
 
 

@@ -43,20 +43,21 @@ export default function Appointment(props) {
 
   }
 
-  function deleteInterview(name, interviewer) {
+  async function deleteInterview(name, interviewer) {
     const interview = {
       student: name,
       interviewer
     };
-    transition(DELETING,true);
-    props.cancelInterview(props.id, interview)
-      .then(() => transition(EMPTY))
+    transition(DELETING, true);
+    await props.cancelInterview(props.id, interview)
+    .then(() => transition(EMPTY))
       .catch(error => transition(ERROR_DELETE, true));
+      
   }
 
   return (
 
-    <article className="appointment">
+    <article className="appointment" data-testid="appointment">
       <Header time={props.time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {
