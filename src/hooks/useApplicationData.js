@@ -15,11 +15,8 @@ export default function useApplicationData() {
     const currentDayInfo = state.days.find(day => day.name === state.day);
     // Returns current day index value
     const currentDayIndex = state.days.findIndex(day => day.name === state.day);
-
     // looping through appointment id the day object returning all appointments that have null interviews
-
     const currentDaySpots = currentDayInfo.appointments.filter((appointmentId)=>appointments[appointmentId].interview === null).length
-
     // creates a shallow copy of the state.days
     const updatedDays = [...state.days]
 
